@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template.xhtml">
+
+	<ui:param name="pageTitle" value="QouteWall" />
+
+	<ui:define name="main">
+		<div style="text-align: center; margin-top: 50px;">
+			<ui:repeat value="#{quoteBean.quotes}" var="quote">
+				<blockquote>
+					<p>
+						<h:outputText value="#{quote.text}" />
+					</p>
+					<footer>
+						<h:outputText value="#{quote.author}" />
+					</footer>
+				</blockquote>
+			</ui:repeat>
+		</div>
+	</ui:define>
+
+	<ui:define name="rightSide">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h:form id="addForm" class="form-horizontal well">
+					<fieldset>
+						<legend>#{msg.addQuote}</legend>
+						
+						<div class="form-group">
+							<h:outputLabel value="#{msg.author}:" for="author" />
+							<h:inputText id="author" value="#{quoteBean.authorAdd}" class="form-control" />
+						</div>
+
+						<div class="form-group">
+							<h:outputLabel value="#{msg.text}:" for="text" />
+							<h:inputTextarea id="text" value="#{quoteBean.textAdd}" class="form-control" rows="10" />
+						</div>
+						
+						<div class="form-group">
+							<label class="col-md-8 control-label" for="singlebutton" />
+							<h:commandButton value="#{msg.add}" action="#{quoteBean.add}" class="btn btn-primary" />
+						</div>
+
+					</fieldset>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

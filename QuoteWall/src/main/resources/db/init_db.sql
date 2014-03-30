@@ -1,0 +1,10 @@
+insert into quotes (id, author, text, created) values (1, 'Napoleon Bonaparte', 'Glory is fleeting, but obscurity is forever.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (2, 'General George S. Patton', 'If a man does his best, what else is there?', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (3, 'Albert Einstein', 'Not everything that can be counted counts, and not everything that counts can be counted.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (4, 'Albert Einstein', 'Only two things are infinite, the universe and human stupidity, and I\'m not sure about the former.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (5, 'Galileo Galilei', 'I do not feel obliged to believe that the same God who has endowed us with sense, reason, and intellect has intended us to forgo their use.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (6, 'Thomas Jefferson', 'I find that the harder I work, the more luck I seem to have.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (7, 'Rene Descartes', 'Each problem that I solved became a rule which served afterwards to solve other problems.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (8, 'Napoleon Bonaparte', 'Never interrupt your enemy when he is making a mistake.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (9, 'unknown', 'The difference between \'involvement\' and \'commitment\' is like an eggs-and-ham breakfast: the chicken was \'involved\' - the pig was \'committed\'.', CURRENT_TIMESTAMP());
+insert into quotes (id, author, text, created) values (10, 'Voltaire', 'God is a comedian playing to an audience too afraid to laugh.', CURRENT_TIMESTAMP());
