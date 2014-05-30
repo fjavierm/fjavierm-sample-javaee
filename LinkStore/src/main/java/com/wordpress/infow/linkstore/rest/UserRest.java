@@ -15,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -58,6 +60,7 @@ public class UserRest {
         if (user == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
+        
         return Response.ok(user).build();
     }
 
@@ -67,12 +70,12 @@ public class UserRest {
         List<Users> users = this.userService.findAll(startPosition, maxResult);
 
         if (users == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        } else {
-            UsersBind userBind = new UsersBind(users);
-
-            return Response.ok(userBind).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        
+        GenericEntity entity = new GenericEntity<List<Users>>(users){};
+
+        return Response.ok(entity).build();
     }
 
     @PUT

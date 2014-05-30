@@ -15,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -56,8 +58,9 @@ public class LinkRest {
         Links link = this.linkService.findById(id);
 
         if (link == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        
         return Response.ok(link).build();
     }
 
@@ -67,12 +70,12 @@ public class LinkRest {
         List<Links> links = this.linkService.findAll(startPosition, maxResult);
 
         if (links == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        } else {
-            LinkBind linkBind = new LinkBind(links);
-
-            return Response.ok(linkBind).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        
+        GenericEntity entity = new GenericEntity<List<Links>>(links){};
+
+        return Response.ok(entity).build();
     }
 
     @PUT
