@@ -22,14 +22,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-@Path("/link")
+@Path("/links")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class LinkRest {
     
     @EJB
     private LinkService linkService;
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUser(Links link) {
         if (link == null) {
             throw new BadRequestException();
@@ -53,19 +54,17 @@ public class LinkRest {
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findById(@PathParam("id") Integer id) {
         Links link = this.linkService.findById(id);
 
         if (link == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException("No links recovered.");
         }
         
         return Response.ok(link).build();
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
         List<Links> links = this.linkService.findAll(startPosition, maxResult);
 
@@ -80,7 +79,6 @@ public class LinkRest {
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Links link) {
         this.linkService.update(link);
 

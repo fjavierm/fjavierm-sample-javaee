@@ -22,14 +22,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-@Path("/user")
+@Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserRest {
 
     @EJB
     private UserService userService;
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUser(Users user) {
         if (user == null) {
             throw new BadRequestException();
@@ -53,7 +54,6 @@ public class UserRest {
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findById(@PathParam("id") Integer id) {
         Users user = this.userService.findById(id);
 
@@ -65,12 +65,11 @@ public class UserRest {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
         List<Users> users = this.userService.findAll(startPosition, maxResult);
 
         if (users == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException("No users recovered.");
         }
         
         GenericEntity entity = new GenericEntity<List<Users>>(users){};
@@ -80,7 +79,6 @@ public class UserRest {
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Users user) {
         this.userService.update(user);
         
