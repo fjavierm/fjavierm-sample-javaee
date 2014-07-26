@@ -15,19 +15,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-@Path("/user")
+@Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserRest {
 
     @EJB
     private UserService userService;
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUser(Users user) {
         if (user == null) {
             throw new BadRequestException();
@@ -51,33 +54,31 @@ public class UserRest {
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findById(@PathParam("id") Integer id) {
         Users user = this.userService.findById(id);
 
         if (user == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
+        
         return Response.ok(user).build();
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
         List<Users> users = this.userService.findAll(startPosition, maxResult);
 
         if (users == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        } else {
-            UsersBind userBind = new UsersBind(users);
-
-            return Response.ok(userBind).build();
+            throw new WebApplicationException("No users recovered.");
         }
+        
+        GenericEntity entity = new GenericEntity<List<Users>>(users){};
+
+        return Response.ok(entity).build();
     }
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Users user) {
         this.userService.update(user);
         

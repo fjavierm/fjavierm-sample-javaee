@@ -15,19 +15,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-@Path("/category")
+@Path("/categories")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class CategoryRest {
 
     @EJB
     private CategoryService categoryService;
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUser(Categories category) {
         if (category == null) {
             throw new BadRequestException();
@@ -51,33 +54,31 @@ public class CategoryRest {
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findById(@PathParam("id") Integer id) {
         Categories category = this.categoryService.findById(id);
 
         if (category == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        
         return Response.ok(category).build();
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
         List<Categories> categories = this.categoryService.findAll(startPosition, maxResult);
 
         if (categories == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        } else {
-            CategoryBind categoryBind = new CategoryBind(categories);
-
-            return Response.ok(categoryBind).build();
+            throw new WebApplicationException("No categories recovered.");
         }
+        
+        GenericEntity entity = new GenericEntity<List<Categories>>(categories){};
+
+        return Response.ok(entity).build();
     }
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Categories category) {
         this.categoryService.update(category);
 

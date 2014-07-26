@@ -15,19 +15,22 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-@Path("/link")
+@Path("/links")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class LinkRest {
     
     @EJB
     private LinkService linkService;
 
     @POST
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createUser(Links link) {
         if (link == null) {
             throw new BadRequestException();
@@ -51,33 +54,31 @@ public class LinkRest {
 
     @GET
     @Path("/{id:[0-9][0-9]*}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response findById(@PathParam("id") Integer id) {
         Links link = this.linkService.findById(id);
 
         if (link == null) {
-            return Response.status(Status.NOT_FOUND).build();
+            throw new WebApplicationException("No links recovered.");
         }
+        
         return Response.ok(link).build();
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response listAll(@QueryParam("start") Integer startPosition, @QueryParam("max") Integer maxResult) {
         List<Links> links = this.linkService.findAll(startPosition, maxResult);
 
         if (links == null) {
-            return Response.status(Status.NOT_FOUND).build();
-        } else {
-            LinkBind linkBind = new LinkBind(links);
-
-            return Response.ok(linkBind).build();
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        
+        GenericEntity entity = new GenericEntity<List<Links>>(links){};
+
+        return Response.ok(entity).build();
     }
 
     @PUT
     @Path("/{id:[0-9][0-9]*}")
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response update(Links link) {
         this.linkService.update(link);
 
