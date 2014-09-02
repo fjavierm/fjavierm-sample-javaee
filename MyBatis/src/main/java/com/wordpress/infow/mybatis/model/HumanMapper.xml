@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mappers.HumanMapper" >
+
+	<resultMap type="Human" id="HumanResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="Human" id="HumanMammalResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- Human -->
+	
+	<select id="getHumanById" parameterType="int" resultMap="HumanResultMap">
+		select id,
+		       name
+		  from human
+		 where id = #{id}
+	</select>
+	
+	<select id="getAllHumans" parameterType="int" resultMap="HumanResultMap">
+		select id,
+		       name
+		  from human
+	</select>
+	
+	<insert id="insertHuman" parameterType="Human">
+		insert into human
+		            (id, name)
+		     values (#{id, jdbcType=INTEGER}, #{name, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateHuman" parameterType="Human">
+		update human
+		   set name = #{name, jdbcType=VARCHAR}
+		 where id = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteHuman" parameterType="int">
+		delete from human
+		 where id = #{id, jdbcType=INTEGER}
+	</delete>
+	
+	<!-- Human + Mammal -->
+	
+	<select id="getHumanMammalById" parameterType="int" resultMap="HumanMammalResultMap">
+		select h.id,
+			   m.age,
+		       h.name
+		  from human h
+		  left outer join mammal m on h.id = m.id
+		 where h.id = #{id}
+	</select>
+	
+	<select id="getAllHumanMammals" parameterType="int" resultMap="HumanMammalResultMap">
+		select h.id,
+			   m.age,
+		       h.name
+		  from human
+		  left outer join mammal m on h.id = m.id
+	</select>
+	
+	<insert id="insertHumanMammal" parameterType="Human">
+		insert into mammal
+		            (id, age)
+		     values (#{id, jdbcType=INTEGER}, #{age, jdbcType=INTEGER});
+		insert into human
+		            (id, name)
+		     values (#{id, jdbcType=INTEGER}, #{name, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateHumanMammal" parameterType="Human">
+		update mammal
+		   set age = #{age, jdbcType=INTEGER}
+		 where id = #{id, jdbcType=INTEGER};
+		update human
+		   set name = #{name, jdbcType=VARCHAR}
+		 where id = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteHumanMammal" parameterType="int">
+		delete from human
+		 where id = #{id, jdbcType=INTEGER};
+		delete from mammal
+		 where id = #{id, jdbcType=INTEGER}
+	</delete>
+	
+</mapper>

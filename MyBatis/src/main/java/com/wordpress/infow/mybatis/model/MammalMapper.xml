@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mappers.MammalMapper" >
+
+	<resultMap type="Mammal" id="MammalResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="getMammalById" parameterType="int" resultMap="MammalResultMap">
+		select id,
+		       age
+		  from mammal
+		 where id = #{id}
+	</select>
+	
+	<select id="getAllMammals" parameterType="int" resultMap="MammalResultMap">
+		select id,
+		       age
+		  from mammal
+	</select>
+	
+	<insert id="insertMammal" parameterType="Mammal">
+		insert into mammal
+		            (id, age)
+		     values (#{id, jdbcType=INTEGER}, #{age, jdbcType=INTEGER})
+	</insert>
+	
+	<update id="updateMammal" parameterType="Mammal">
+		update mammal
+		   set age = #{age, jdbcType=INTEGER}
+		 where id = #{id, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="deleteMammal" parameterType="int">
+		delete from mammal
+		 where id = #{id, jdbcType=INTEGER}
+	</delete>
+	
+</mapper>
