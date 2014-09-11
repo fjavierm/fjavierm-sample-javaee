@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Basic Web Socket Example</title>
+	</head>
+	<body>
+		<script>
+			var socket = new WebSocket("ws://localhost:8080/simplews/echo");
+			socket.onmessage = function (event) {
+				alert(event.data);
+			}
+		</script>
+		
+		<button onclick="socket.send('hey duke')">send</button>
+	</body>
+</html>
