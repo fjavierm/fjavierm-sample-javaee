@@ -22,7 +22,7 @@ import javax.xml.bind.JAXBElement;
 import com.worpress.infow.rentroom.model.Room;
 import com.worpress.infow.rentroom.services.RoomService;
 
-@Path ("/room")
+@Path ("/rooms")
 public class RoomEndPoint implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,21 +34,19 @@ public class RoomEndPoint implements Serializable {
 	private UriInfo uriInfo;
 
 	@GET
-	@Path ("/rooms")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Room> findAllRoom() {
 		return this.roomService.findAllRooms();
 	}
 
 	@GET
-	@Path ("/room/{title}")
+	@Path ("/{title}")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Room> findRoomByTittle(@PathParam ("tittle") String tittle) {
 		return this.roomService.findByTittle(tittle);
 	}
 
 	@POST
-	@Path ("/room")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response createRoom(JAXBElement<Room> xmlRoom) {
 		Room room = this.roomService.createRoom(xmlRoom.getValue());
@@ -58,7 +56,6 @@ public class RoomEndPoint implements Serializable {
 	}
 
 	@PUT
-	@Path ("/room")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response updateRoom(JAXBElement<Room> xmlRoom) {
 		Room room = this.roomService.updateRoom(xmlRoom.getValue());
@@ -68,7 +65,7 @@ public class RoomEndPoint implements Serializable {
 	}
 
 	@DELETE
-	@Path ("/room/{id}")
+	@Path ("/{id}")
 	public Response removeUser(@PathParam ("id") Integer id) {
 		this.roomService.removeRoom(this.roomService.findById(id));
 

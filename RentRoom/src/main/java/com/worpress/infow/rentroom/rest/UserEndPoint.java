@@ -22,7 +22,7 @@ import javax.xml.bind.JAXBElement;
 import com.worpress.infow.rentroom.model.User;
 import com.worpress.infow.rentroom.services.UserService;
 
-@Path ("/user")
+@Path ("/users")
 public class UserEndPoint implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,21 +34,19 @@ public class UserEndPoint implements Serializable {
 	private UriInfo uriInfo;
 
 	@GET
-	@Path ("/users")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<User> findAllUsers() {
 		return this.userService.findAllUsers();
 	}
 
 	@GET
-	@Path ("/user/{login}")
+	@Path ("/{login}")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public User findUserByName(@PathParam ("login") String login) {
 		return this.userService.findByLogin(login);
 	}
 
 	@POST
-	@Path ("/user")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response createUser(JAXBElement<User> xmlUser) {
 		User user = this.userService.createUser(xmlUser.getValue());
@@ -58,7 +56,6 @@ public class UserEndPoint implements Serializable {
 	}
 
 	@PUT
-	@Path ("/user")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response updateUser(JAXBElement<User> xmlUser) {
 		User user = this.userService.updateUser(xmlUser.getValue());
@@ -68,7 +65,7 @@ public class UserEndPoint implements Serializable {
 	}
 
 	@DELETE
-	@Path ("/user/{login}")
+	@Path ("/{login}")
 	public Response removeUser(@PathParam ("login") String login) {
 		this.userService.removeUser(this.userService.findByLogin(login));
 

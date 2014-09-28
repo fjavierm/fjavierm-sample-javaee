@@ -24,7 +24,7 @@ import com.worpress.infow.rentroom.services.CommentService;
 import com.worpress.infow.rentroom.services.RoomService;
 import com.worpress.infow.rentroom.services.UserService;
 
-@Path ("/opinion")
+@Path ("/comments")
 public class CommentEndPoint implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,21 +42,19 @@ public class CommentEndPoint implements Serializable {
 	private UriInfo uriInfo;
 
 	@GET
-	@Path ("/comments")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Comment> findAllComments() {
 		return this.commentService.findAllComments();
 	}
 
 	@GET
-	@Path ("/comment/{userId}")
+	@Path ("/{userId}")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Comment> findCommentByUser(@PathParam ("userId") Integer userId) {
 		return this.commentService.findByUser(this.userService.findById(userId));
 	}
 
 	@POST
-	@Path ("/comment")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response createComment(JAXBElement<Comment> xmlComment) {
 		Comment comment = this.commentService.createComment(xmlComment.getValue());
@@ -66,7 +64,6 @@ public class CommentEndPoint implements Serializable {
 	}
 
 	@PUT
-	@Path ("/comment")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response updateComment(JAXBElement<Comment> xmlComment) {
 		Comment comment = this.commentService.updateComment(xmlComment.getValue());
@@ -76,7 +73,7 @@ public class CommentEndPoint implements Serializable {
 	}
 
 	@DELETE
-	@Path ("/comment/{id}")
+	@Path ("/{id}")
 	public Response removeUser(@PathParam ("id") Integer id) {
 		this.commentService.removeComment(this.commentService.findById(id));
 

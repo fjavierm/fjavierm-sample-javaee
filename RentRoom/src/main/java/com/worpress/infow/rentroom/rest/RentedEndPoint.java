@@ -24,7 +24,7 @@ import com.worpress.infow.rentroom.services.RentedService;
 import com.worpress.infow.rentroom.services.RoomService;
 import com.worpress.infow.rentroom.services.UserService;
 
-@Path ("/rented")
+@Path ("/rents")
 public class RentedEndPoint implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,21 +42,19 @@ public class RentedEndPoint implements Serializable {
 	private UriInfo uriInfo;
 
 	@GET
-	@Path ("/rents")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Rented> findAllRented() {
 		return this.rentedService.findAllRented();
 	}
 
 	@GET
-	@Path ("/rent/{userId}")
+	@Path ("/{userId}")
 	@Produces ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Rented> findRentedByUser(@PathParam ("userId") Integer userId) {
 		return this.rentedService.findByUser(this.userService.findById(userId));
 	}
 
 	@POST
-	@Path ("/rent")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response createRented(JAXBElement<Rented> xmlRented) {
 		Rented rented = this.rentedService.createRented(xmlRented.getValue());
@@ -66,7 +64,6 @@ public class RentedEndPoint implements Serializable {
 	}
 
 	@PUT
-	@Path ("/rent")
 	@Consumes ({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response updateRented(JAXBElement<Rented> xmlRented) {
 		Rented rented = this.rentedService.updateRented(xmlRented.getValue());
@@ -76,7 +73,7 @@ public class RentedEndPoint implements Serializable {
 	}
 
 	@DELETE
-	@Path ("/rent/{id}")
+	@Path ("/{id}")
 	public Response removeUser(@PathParam ("id") Integer id) {
 		this.rentedService.removeRented(this.rentedService.findById(id));
 

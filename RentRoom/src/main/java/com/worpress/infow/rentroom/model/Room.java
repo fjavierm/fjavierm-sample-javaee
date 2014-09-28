@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,11 +55,11 @@ public class Room implements Serializable {
 	private String tittle;
 
 	// bi-directional many-to-one association to Comment
-	@OneToMany (mappedBy = "roomBean")
+	@OneToMany (mappedBy = "roomBean", fetch = FetchType.EAGER)
 	private List<Comment> comments;
 
 	// bi-directional many-to-one association to Rented
-	@OneToMany (mappedBy = "roomBean")
+	@OneToMany (mappedBy = "roomBean", fetch = FetchType.EAGER)
 	private List<Rented> renteds;
 
 	// bi-directional many-to-one association to User
